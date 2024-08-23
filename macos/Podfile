@@ -1,0 +1,41 @@
+rColor, defaultValue: null));
+    properties.add(ColorProperty('disabledBorderColor', disabledBorderColor, defaultValue: null));
+    properties.add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius, defaultValue: null));
+    properties.add(DoubleProperty('borderWidth', borderWidth, defaultValue: null));
+    properties.add(DiagnosticsProperty<Axis>('direction', direction, defaultValue: Axis.horizontal));
+    properties.add(DiagnosticsProperty<VerticalDirection>('verticalDirection', verticalDirection, defaultValue: VerticalDirection.down));
+  }
+}
+
+@immutable
+class _ResolveFillColor extends MaterialStateProperty<Color?> with Diagnosticable {
+  _ResolveFillColor(this.primary);
+
+  final Color? primary;
+
+  @override
+  Color? resolve(Set<MaterialState> states) {
+    if (primary is MaterialStateProperty<Color>) {
+      return MaterialStateProperty.resolveAs<Color?>(primary, states);
+    }
+    return states.contains(MaterialState.selected) ? primary : null;
+  }
+}
+
+@immutable
+class _DefaultFillColor extends MaterialStateProperty<Color> with Diagnosticable {
+  _DefaultFillColor(this.colorScheme);
+
+  final ColorScheme colorScheme;
+
+  @override
+  Color resolve(Set<MaterialState> states) {
+    if (states.contains(MaterialState.selected)) {
+      return colorScheme.primary.withOpacity(0.12);
+    }
+    return colorScheme.surface.withOpacity(0.0);
+  }
+}
+
+@immutable
+class
